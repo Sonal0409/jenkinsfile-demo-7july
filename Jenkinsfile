@@ -4,7 +4,7 @@ pipeline{
         maven 'mymaven'
     }
     parameters{
-        choice(name: 'ENV', choices: ["Dev","QA"] )
+        choice(name: 'ENV', choices: [" ","Dev","QA"] )
     }
     stages{
         
