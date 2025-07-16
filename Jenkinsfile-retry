@@ -1,0 +1,23 @@
+
+pipeline{
+    agent any
+    tools{
+        maven 'mymaven'
+    }
+  
+    stages{
+        stage('Build code in your Environment'){
+           
+            steps{
+                retry(3)
+                {
+                git 'https://github.com/Sonal0kjbb409/DevOpsCodeDemo.git'
+                sh "mvn compile" // refering the command from varaible 2
+            }
+            }
+            
+            }
+        }
+  
+}
+
