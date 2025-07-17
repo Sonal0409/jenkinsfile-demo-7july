@@ -1,0 +1,25 @@
+@Library('sharedlib')_
+pipeline{
+    agent none
+    tools{
+        maven 'mymaven'
+    }
+    
+    stages{
+        stage('Test Code in DevEnv'){
+            agent any
+            steps{
+               repo 'https://github.com/Sonal0409/DevOpsCodeDemo.git'
+               build 'Test' 
+            }
+        }
+         stage('package Code in Test '){
+             agent any
+            steps{
+                repo 'https://github.com/Sonal0409/DevOpsCodeDemo.git'
+                build 'Compile'
+                filterlogs ('WARNING', 5 )
+            }
+        }
+    }
+}
