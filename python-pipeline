@@ -1,0 +1,48 @@
+pipeline {
+    agent {
+        docker {
+            image 'python:3.11-slim'
+            args '-u root' // for installing system packages if needed
+        }
+    }
+    environment {
+        ARTIFACT_NAME = 'app.py'
+    }
+    stages {
+        
+        stage('checkout code'){
+            
+            steps{
+                git 'https://github.com/Sonal0409/jenkins-python-pipeline-17july.git'
+            }
+        }
+        stage('Install Dependencies') {
+            steps {
+                sh 'pip install --no-cache-dir -r requirements.txt'
+            }
+        }
+
+        stage('Lint Code') {
+            steps {
+                sh 'flake8 app.py test_app.py'
+            }
+        }
+
+        stage('Run Tests with Coverage') {
+            steps {
+                sh 'pytest --cov=app --cov-report=xml --junitxml=test-results/results.xml'
+            }
+        }
+
+        stage('Archive Artifact') {
+            steps {
+                archiveArtifacts artifacts: "${ARTIFACT_NAME}", fingerprint: true
+            }
+        }
+    }
+    post {
+        always {
+            junit 'test-results/*.xml' // Optional: for JUnit-style results
+        }
+    }
+}
