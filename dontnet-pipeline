@@ -1,0 +1,17 @@
+pipeline{
+    
+    agent any
+    
+    stages{
+        stage('Build and deploy .net repo')
+        {
+            steps{
+                git branch:'main',url:'https://github.com/Sonal0409/Docker-Stack-VotingApp.git'
+                sh 'sudo chmod -R 777 /var/run/docker.sock'
+                sh 'docker build -t mydotimage -f /var/lib/jenkins/workspace/dotnetdemo/example-voting-app/worker/Dockerfile /var/lib/jenkins/workspace/dotnetdemo/example-voting-app/worker'
+                sh 'docker run -d mydotimage'
+                
+            }
+        }
+    }
+}
